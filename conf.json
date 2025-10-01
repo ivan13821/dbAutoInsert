@@ -1,0 +1,52 @@
+
+
+
+
+
+
+{
+  "database": "postgresql",
+  "conf":{
+    "host": "localhost",
+    "database": "support",
+    "port": "5432",
+    "user": "ivashka",
+    "password": "12345"
+  },
+  "data": [
+    {
+      "name": "new",
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "len": 40,
+          "values": "random"
+        },
+        {
+          "name": "date_of_bithday",
+          "type": "date",
+          "values": "2019-01-01 2020-01-01"
+        },
+        {
+          "name": "age",
+          "type": "integer",
+          "len": 2,
+          "values": "random"
+        },
+        {
+          "name": "age2",
+          "type": "integer",
+          "len": 2,
+          "values": ["1", "2", "3", "4"]
+        },
+        {
+          "name": "age3",
+          "type": "integer",
+          "len": 2,
+          "values": "1000-100"
+        }
+      ]
+    }
+  ]
+}
