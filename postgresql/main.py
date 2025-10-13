@@ -1,12 +1,12 @@
 from postgresql.connect import Database
-from postgresql.generate import Generate
+from generate.main import Generate
 
 
 
 data_type={
     "string":"text",
     "integer":"int",
-    "float":"float4",
+    "float":"DOUBLE PRECISION",
     "date":"date",
     "time":"time",
     "datetime":"timestamp"
@@ -24,31 +24,29 @@ def postgresql(conf: dict, data: dict) -> None:
 
 
     for i in data:
-        name, data = i["name"], i["data"]
+        name, data, rows_count = i["name"], i["data"], i["rows_count"]
+        db.execute_query(f"DROP TABLE IF EXISTS {name};")
         db.create_table(name=name, data=data)
-        insert_data(name=name, data=data)
+        insert_data(name=name, data=data, rows_count=rows_count)
 
 
 
 
 
-def insert_data(name: str, data: dict) -> None:
+def insert_data(name: str, data: dict, rows_count: int) -> None:
     """Функция для заполнения таблиц данными"""
+    global db
 
     big_mass = []
     query = f"""INSERT INTO {name} ({', '.join([i["name"] for i in data])}) values """
 
-    for i in range(100):
+    for i in range(rows_count):
 
         big_mass.append(generate_values(data))
 
     query += ', '.join(big_mass) + ';'
-    print(query)
 
-    global db
-
-    print(query)
-    db.insert(query)
+    db.execute_query(query)
 
 
 
@@ -61,13 +59,36 @@ def generate_values(data):
     for pole in data:
 
         if pole["type"] == "integer":
-            mass.append(Generate.integer(pole["values"], pole["len"]))
+            if "len" in pole.keys():
+                mass.append(Generate.integer(pole["values"], pole["len"]))
+            else:
+                mass.append(Generate.integer(pole["values"]))
+
+
+        elif pole["type"] == "float":
+            if "len" in pole.keys() and "number_of_decimal" in pole.keys():
+                mass.append(Generate.float(pole['values'], pole["len"], pole["number_of_decimal"]))
+            else:
+                mass.append(Generate.float(pole['values']))
+
 
         elif pole["type"] == "string":
-            mass.append(Generate.get_string(pole["values"], pole["len"]))
+            if "len" in pole.keys():
+                mass.append(Generate.string(pole["values"], pole["len"]))
+            else:
+                mass.append(Generate.string(pole["values"]))
+
 
         elif pole["type"] == "date":
-            mass.append('2019-01-01')
+            mass.append(Generate.date(pole["values"]))
+
+
+        elif pole["type"] == "time":
+            mass.append(Generate.time(pole['values']))
+
+
+        elif pole["type"] == "datetime":
+            mass.append(Generate.datetime(pole['values']))
 
     return f"('{"', '".join(mass)}')"
 

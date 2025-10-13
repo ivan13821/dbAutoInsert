@@ -42,7 +42,7 @@ class Database:
             self.conn = psycopg2.connect(f"""
                                             host={params["host"]}
                                             port={params["port"]}
-                                            sslmode={params["sslmode"]}
+                                            {f'sslmode={params["sslmode"]}' if 'sslmode' in params.keys() else ''}
                                             dbname={params["database"]}
                                             user={params["user"]}
                                             password={params["password"]}
@@ -80,8 +80,3 @@ class Database:
     def create_table(self, name: str, data: dict):
 
         self.execute_query(f"""CREATE TABLE {name} (id serial primary key, {', '.join([i["name"] + ' ' + data_type[i["type"]] for i in data])})""")
-
-
-    def insert(self, query: str):
-
-        self.execute_query(query)
