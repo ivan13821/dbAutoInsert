@@ -7,11 +7,13 @@
 {
   "database": "postgresql",
   "conf":{
-    "host": "localhost",
-    "database": "support",
-    "port": "5432",
+    "host": "c-c9qki4ktfq94avnqm30b.rw.mdb.yandexcloud.net",
+    "database": "db1",
+    "port": "6432",
+    "sslmode": "verify-full",
     "user": "ivashka",
-    "password": "12345"
+    "password": "12345678",
+    "target_session_attrs": "read-write"
   },
   "data": [
     {
@@ -22,6 +24,12 @@
           "type": "string",
           "len": 40,
           "values": "random"
+        },
+        {
+          "name": "name2",
+          "type": "string",
+          "len": 40,
+          "values": ["Bob", "Anna", "Jon"]
         },
         {
           "name": "date_of_bithday",

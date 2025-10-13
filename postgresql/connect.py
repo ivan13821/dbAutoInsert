@@ -39,7 +39,16 @@ class Database:
         print('Подключаюсь к PostgreSQL...')
 
         try:
-            self.conn = psycopg2.connect(**params)
+            self.conn = psycopg2.connect(f"""
+                                            host={params["host"]}
+                                            port={params["port"]}
+                                            sslmode={params["sslmode"]}
+                                            dbname={params["database"]}
+                                            user={params["user"]}
+                                            password={params["password"]}
+                                            target_session_attrs={params["target_session_attrs"]}
+                                        """)
+
             self.conn.autocommit = True
             self.cur = self.conn.cursor()
             print(f'Успешно подключен!')
