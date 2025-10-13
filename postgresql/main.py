@@ -25,7 +25,7 @@ def postgresql(conf: dict, data: dict) -> None:
 
     for i in data:
         name, data = i["name"], i["data"]
-        #db.create_table(name=name, data=data)
+        db.create_table(name=name, data=data)
         insert_data(name=name, data=data)
 
 
@@ -47,6 +47,7 @@ def insert_data(name: str, data: dict) -> None:
 
     global db
 
+    print(query)
     db.insert(query)
 
 
