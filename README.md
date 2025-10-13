@@ -19,7 +19,7 @@ pip install -r requirements.txt
 <br>
 
 # 🛠 Возможности
-- Поддержка ключевых СУБД Yandex Cloud:
+- Поддержка СУБД Yandex Cloud:
     - Yandex Managed Service for PostgreSQL
     - Yandex Managed Service for ClickHouse
     - Yandex Managed Service for MySQL
