@@ -1,5 +1,6 @@
 import random
-
+from datetime import datetime
+from generate.defence.main import Defence
 
 
 class Generate:
@@ -16,10 +17,18 @@ class Generate:
         return number
 
 
+    @staticmethod
+    @Defence.defender('integer')
+    def integer(values, len=0) -> str:
+        return Generate.__integer(values, len)
+
+
+
+
 
     @staticmethod
-    def integer(values, len=0) -> str:
-        if values == "random":
+    def __integer(values, len=0) -> str:
+        if values == "random" and len > 0:
             return ''.join([str(random.randint(1, 9)) for i in range(int(len))])
 
 
@@ -28,8 +37,7 @@ class Generate:
 
 
         if "-" in values:
-            values = list(map(int, values.split("-")))
-            start, end = min(values), max(values)
+            start, end = list(map(int, values.split("-")))
             return str(random.randint(start, end))
 
         raise ValueError("Неверное значение для поля values типа данных integer")
@@ -38,11 +46,12 @@ class Generate:
 
 
     @staticmethod
+    @Defence.defender('float')
     def float(values, len: int = 0, number_of_decimal: int = 0) -> str:
         """Генерирует число с плавающей точкой"""
 
-        if values == "random":
-            return Generate.integer(values="random", len=len) + "." + Generate.integer(values="random", len=number_of_decimal)
+        if values == "random" and len > 0:
+            return Generate.__integer(values="random", len=len) + "." + Generate.__integer(values="random", len=number_of_decimal)
 
         if type(values) == type([]):
             return str(random.choice(values))
@@ -51,7 +60,7 @@ class Generate:
             start, end = values.split('-')
             start = start.split('.')
             end = end.split('.')
-            return Generate.integer(start[0]+'-'+end[0]) + '.' + Generate.integer(start[1]+'-'+end[1])
+            return Generate.__integer(start[0]+'-'+end[0]) + '.' + Generate.__integer(start[1]+'-'+end[1])
 
         raise ValueError("Неверное значение для поля values типа данных float")
 
@@ -61,10 +70,11 @@ class Generate:
 
 
     @staticmethod
+    @Defence.defender('string')
     def string(values, len = 0):
         """Функция генерирует строку данных"""
 
-        if values == "random":
+        if values == "random" and len > 0:
             return ''.join([str(random.choice(list("qwertyuiopasdfghjklzxcvbnm"))) for i in range(int(len))])
 
         if type(values) == type([]):
@@ -77,7 +87,16 @@ class Generate:
 
 
     @staticmethod
+    @Defence.defender('date')
     def date(values, split=' ') -> str:
+        return Generate.__date(values, split)
+
+
+
+
+
+    @staticmethod
+    def __date(values, split=' ') -> str:
         """Функция для генерации данных формата дата"""
 
         if values == "random":
@@ -89,15 +108,9 @@ class Generate:
         if type(values) == type([]):
             return str(random.choice(values))
 
-        try:
-            start_date, end_date = list(map(lambda x: list(map(int, x.split('-'))), values.split(split)))
-            return '-'.join([
-                str(random.randint(start_date[0], end_date[0])),
-                Generate.__number_for_date(str(random.randint(start_date[1], end_date[1]))),
-                Generate.__number_for_date(str(random.randint(start_date[2], end_date[2])))])
+        start_date, end_date = list(map(lambda x: int(datetime.strptime(x, '%Y-%m-%d').timestamp()), values.split(split)))
 
-        except:
-            raise ValueError("Неверное значение для поля values типа данных date")
+        return str(datetime.fromtimestamp(random.randint(start_date, end_date)).date())
 
 
 
@@ -108,7 +121,7 @@ class Generate:
         """Функция для генерации данных формата дата и время"""
 
         if values == "random":
-            return f"{Generate.date("random")} {Generate.time("random")}"
+            return f"{Generate.__date("random")} {Generate.time("random")}"
 
         if type(values) == type([]):
             return str(random.choice(values))
@@ -118,7 +131,7 @@ class Generate:
             start_date, start_time = start.split('|')
             end_date, end_time = end.split('|')
 
-            return f"{Generate.date(f"{start_date} {end_date}")} {Generate.time(f"{start_time} {end_time}")}"
+            return f"{Generate.__date(f"{start_date} {end_date}")} {Generate.time(f"{start_time} {end_time}")}"
         except:
             raise ValueError("Неверное значение для поля values типа данных datetime")
 
