@@ -1,26 +1,26 @@
-from postgresql.connect import Postgresql
 from generate.main import Generate
-
-
+from my_sql.connect import Mysql
 
 data_type={
-    "string":"text",
-    "integer":"int",
-    "float":"DOUBLE PRECISION",
-    "date":"date",
-    "time":"time",
-    "datetime":"timestamp"
+    "string":"TEXT",
+    "integer":"INT",
+    "float":"DOUBLE",
+    "date":"DATE",
+    "time":"TIME",
+    "datetime":"DATETIME"
 }
 
 
 
 
-def postgresql(conf: dict, data: dict) -> None:
+
+
+def mysql(conf: dict, data: dict) -> None:
     """Функция подключается к БД, создает таблицу, и наливает в нее данные"""
 
     global db
 
-    db = Postgresql(conf=conf)
+    db = Mysql(conf=conf)
 
 
     for i in data:
@@ -91,7 +91,6 @@ def generate_values(data):
             mass.append(Generate.datetime(pole['values']))
 
     return f"('{"', '".join(mass)}')"
-
 
 
 

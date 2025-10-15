@@ -2,11 +2,13 @@ import json
 from validate import validate_json
 from postgresql.main import postgresql
 from csv_file.main import csv_generate
+from my_sql.main import mysql
 
 
 databases = {
     "postgresql": postgresql,
-    "csv": csv_generate
+    "csv": csv_generate,
+    "mysql":mysql
 }
 
 

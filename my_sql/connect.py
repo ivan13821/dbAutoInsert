@@ -1,12 +1,12 @@
-import psycopg2
+import pymysql
 
 data_type={
-    "string":"text",
-    "integer":"int",
-    "float":"float4",
-    "date":"date",
-    "time":"time",
-    "datetime":"timestamp"
+    "string":"TEXT",
+    "integer":"INT",
+    "float":"DOUBLE",
+    "date":"DATE",
+    "time":"TIME",
+    "datetime":"DATETIME"
 }
 
 
@@ -26,7 +26,7 @@ def singleton(class_):
 
 
 @singleton
-class Postgresql:
+class Mysql:
 
     # подключение и создание бд ------------------------------------------------------------------------------------------
     def __init__(self, conf: dict):
@@ -36,18 +36,17 @@ class Postgresql:
         self.connect_to_db(conf)
 
     def connect_to_db(self, params):
-        print('Подключаюсь к PostgreSQL...')
+        print('Подключаюсь к MySQL...')
 
         try:
-            self.conn = psycopg2.connect(f"""
-                                            host={params["host"]}
-                                            port={params["port"]}
-                                            {f'sslmode={params["sslmode"]}' if 'sslmode' in params.keys() else ''}
-                                            dbname={params["database"]}
-                                            user={params["user"]}
-                                            password={params["password"]}
-                                            target_session_attrs={params["target_session_attrs"]}
-                                        """)
+            self.conn = pymysql.connect(
+                                    host=params["host"],
+                                    user=params['user'],
+                                    password=params['password'],
+                                    database=params['database'],
+                                    charset='utf8mb4',
+                                    autocommit=True
+                                )
 
             self.conn.autocommit = True
             self.cur = self.conn.cursor()
@@ -62,8 +61,7 @@ class Postgresql:
                 self.cur.execute(query, params)
             else:
                 self.cur.execute(query)
-        except psycopg2.InterfaceError as e:
-            print(e)
+        except:
             print("Не удалось выполнить запрос из-за ошибки подключения. Пытаюсь подключиться к базе заново")
             self.connect_to_db(self.conf)
             self.cur.execute(query, params)
@@ -79,4 +77,4 @@ class Postgresql:
 
     def create_table(self, name: str, data: dict):
 
-        self.execute_query(f"""CREATE TABLE {name} (id serial primary key, {', '.join([i["name"] + ' ' + data_type[i["type"]] for i in data])})""")
+        self.execute_query(f"""CREATE TABLE {name} (id serial primary key, {', '.join([i["name"] + ' ' + data_type[i["type"]] for i in data])});""")
