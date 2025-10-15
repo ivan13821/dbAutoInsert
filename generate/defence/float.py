@@ -3,20 +3,20 @@
 class FloatDefence:
 
     @staticmethod
-    def check_input(value, len: int = 0, number_of_decimal: int = None) -> bool:
+    def check_input(value, len) -> bool:
         """ Проверяет все возможные значения value для целочисленного типа данных """
-        if value == "random" and (len is None or number_of_decimal is None):
-            raise ValueError("Не объявлено len или number_of_decimal для генерации случайного числа с пл. точкой")
 
-        if value == "random" and (len <= 0 or number_of_decimal <= 0):
-            raise ValueError("Ошибка при генерации случайного числа: Длина числа не может быть меньше или равной 0")
+        if value == "random":
+            return True
 
 
         if type(value) == type([]):
-            value = list(map(FloatDefence.__float, value))
+            result = list(map(FloatDefence.__float, value))
 
-            if False in value:
-                raise ValueError("Ошибка при генерации integer из списка: Все данные внутри списка должны быть числами")
+            if False in result:
+                raise ValueError(f"Ошибка при генерации integer из списка: Все данные внутри списка должны быть числами. value={value}")
+
+            return True
 
 
         if "-" in value:
@@ -25,12 +25,14 @@ class FloatDefence:
             if FloatDefence.__float(start) and FloatDefence.__float(end):
                 pass
             else:
-                raise ValueError("Ошибка при генерации integer из диапазона: начало и конец диапазона должны быть числами")
+                raise ValueError(f"Ошибка при генерации integer из диапазона: начало и конец диапазона должны быть числами. value={value}")
 
             if start > end:
-                raise ValueError("Ошибка при генерации integer из диапазона: начало диапазона не может быть больше конца")
+                raise ValueError(f"Ошибка при генерации integer из диапазона: начало диапазона не может быть больше конца. value={value}")
 
-        return True
+            return True
+
+        raise ValueError(f"Ошибка при генерации float: Unknow error. value={value}")
 
 
 

@@ -6,28 +6,32 @@ class DateDefence:
     def check_input(value, len: int = 0, number_of_decimal: int = None) -> bool:
         """ Проверяет все возможные значения value для целочисленного типа данных """
 
-        #random проверять не нужно
+        if value == "random":
+            return True
 
 
         if type(value) == type([]):
             value = list(map(DateDefence.__date, value))
 
             if False in value:
-                raise ValueError("Ошибка при генерации integer из списка: Некорректная дата в списке")
+                raise ValueError(f"Ошибка при генерации integer из списка: Некорректная дата в списке. value={value}")
+
+            return True
 
 
         if " " in value:
             start, end = value.split(" ")
 
-            if DateDefence.__date(start) and DateDefence.__date(end):
-                pass
-            else:
-                raise ValueError("Ошибка при генерации date из диапазона: начало и конец диапазона должны быть датами")
+            if not (DateDefence.__date(start) and DateDefence.__date(end)):
+                raise ValueError(f"Ошибка при генерации date из диапазона: начало и конец диапазона должны быть датами. value={value}")
+
 
             if datetime.strptime(start, '%Y-%m-%d') > datetime.strptime(end, '%Y-%m-%d'):
-                raise ValueError("Ошибка при генерации integer из диапазона: начало диапазона не может быть больше конца")
+                raise ValueError(f"Ошибка при генерации date из диапазона: начало диапазона не может быть больше конца. value={value}")
 
-        return True
+            return True
+
+        raise ValueError(f"Ошибка при генерации date: Unknow error. value={value}")
 
 
 

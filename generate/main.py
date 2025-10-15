@@ -19,17 +19,17 @@ class Generate:
 
     @staticmethod
     @Defence.defender('integer')
-    def integer(values, len=0) -> str:
-        return Generate.__integer(values, len)
+    def integer(values) -> str:
+        return Generate.__integer(values)
 
 
 
 
 
     @staticmethod
-    def __integer(values, len=0) -> str:
-        if values == "random" and len > 0:
-            return ''.join([str(random.randint(1, 9)) for i in range(int(len))])
+    def __integer(values) -> str:
+        if values == "random":
+            return str(random.randint(0, 1000000000))
 
 
         if type(values) == type([]):
@@ -47,11 +47,11 @@ class Generate:
 
     @staticmethod
     @Defence.defender('float')
-    def float(values, len: int = 0, number_of_decimal: int = 0) -> str:
+    def float(values) -> str:
         """Генерирует число с плавающей точкой"""
 
-        if values == "random" and len > 0:
-            return Generate.__integer(values="random", len=len) + "." + Generate.__integer(values="random", len=number_of_decimal)
+        if values == "random":
+            return str(round(random.uniform(0.0, 10000.0), 4))
 
         if type(values) == type([]):
             return str(random.choice(values))
@@ -71,7 +71,7 @@ class Generate:
 
     @staticmethod
     @Defence.defender('string')
-    def string(values, len = 0):
+    def string(values, len = 0) -> str:
         """Функция генерирует строку данных"""
 
         if values == "random" and len > 0:
@@ -100,10 +100,8 @@ class Generate:
         """Функция для генерации данных формата дата"""
 
         if values == "random":
-            return '-'.join([
-                str(random.randint(1970, 2025)),
-                Generate.__number_for_date(str(random.randint(1, 12))),
-                Generate.__number_for_date(str(random.randint(1, 28)))])
+            start_date, end_date = list(map(lambda x: int(datetime.strptime(x, '%Y-%m-%d').timestamp()), ["1970-01-01", "2025-01-01"]))
+            return str(datetime.fromtimestamp(random.randint(start_date, end_date)).date())
 
         if type(values) == type([]):
             return str(random.choice(values))
@@ -117,11 +115,12 @@ class Generate:
 
 
     @staticmethod
+    @Defence.defender('datetime')
     def datetime(values):
         """Функция для генерации данных формата дата и время"""
 
         if values == "random":
-            return f"{Generate.__date("random")} {Generate.time("random")}"
+            return f"{Generate.__date("random")} {Generate.__time("random")}"
 
         if type(values) == type([]):
             return str(random.choice(values))
@@ -131,33 +130,57 @@ class Generate:
             start_date, start_time = start.split('|')
             end_date, end_time = end.split('|')
 
-            return f"{Generate.__date(f"{start_date} {end_date}")} {Generate.time(f"{start_time} {end_time}")}"
+            return f"{Generate.__date(f"{start_date} {end_date}")} {Generate.__time(f"{start_time} {end_time}")}"
         except:
             raise ValueError("Неверное значение для поля values типа данных datetime")
 
 
 
 
+    @staticmethod
+    def __time_to_seconds(time_str) -> int:
+        """Конвертирует время из формата hh:mm:ss в секунды"""
+        hours, minutes, seconds = map(int, time_str.split(':'))
+        return hours * 3600 + minutes * 60 + seconds
+
+
+
 
     @staticmethod
-    def time(values, split=' '):
+    def __seconds_to_time(total_seconds) -> str:
+        """Конвертирует секунды в формат hh:mm:ss"""
+        total_seconds = int(total_seconds)
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+
+
+
+
+    @staticmethod
+    @Defence.defender('time')
+    def time(values, split=' ') -> str:
+        return Generate.__time(values, split)
+
+
+
+
+
+    @staticmethod
+    def __time(values, split=' '):
         """Функция для генерации данных формата время"""
 
         if values == "random":
-            return ':'.join([
-                Generate.__number_for_date(str(random.randint(0, 23))),
-                Generate.__number_for_date(str(random.randint(0, 59))),
-                Generate.__number_for_date(str(random.randint(0, 59)))])
+            return Generate.__seconds_to_time(random.randint(0, Generate.__time_to_seconds("23:59:59")))
 
         if type(values) == type([]):
             return str(random.choice(values))
 
         try:
-            start_date, end_date = list(map(lambda x: list(map(int, x.split(':'))), values.split(split)))
-            return ':'.join([
-                Generate.__number_for_date(str(random.randint(start_date[0], end_date[0]))),
-                Generate.__number_for_date(str(random.randint(start_date[1], end_date[1]))),
-                Generate.__number_for_date(str(random.randint(start_date[2], end_date[2])))])
+            start, end = values.split(split)
+            return Generate.__seconds_to_time(random.randint(Generate.__time_to_seconds(start), Generate.__time_to_seconds(end)))
 
         except:
             raise ValueError("Неверное значение для поля values типа данных time")
