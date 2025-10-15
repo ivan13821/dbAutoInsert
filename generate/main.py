@@ -129,8 +129,10 @@ class Generate:
             start, end = values.split(' ')
             start_date, start_time = start.split('|')
             end_date, end_time = end.split('|')
-
-            return f"{Generate.__date(f"{start_date} {end_date}")} {Generate.__time(f"{start_time} {end_time}")}"
+            if start_date == end_date:
+                return f"{Generate.__date(f"{start_date} {end_date}")} {Generate.__time(f"{start_time} {end_time}")}"
+            else:
+                return f"{Generate.__date(f"{start_date} {end_date}")} {Generate.__time(f"00:00:00 23:59:59")}"
         except:
             raise ValueError("Неверное значение для поля values типа данных datetime")
 
