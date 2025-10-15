@@ -24,7 +24,7 @@ class Tables(BaseModel):
 
 
 class Template(BaseModel):
-    database: Literal["postgresql", "mysql"]
+    database: Literal["postgresql", "mysql", "csv"]
     conf: Conf
     data: List[Tables]
 
