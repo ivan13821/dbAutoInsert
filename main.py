@@ -3,6 +3,7 @@ from validate import validate_json
 from postgresql.main import postgresql
 from csv_file.main import csv_generate
 from my_sql.main import mysql
+from time import time
 
 
 databases = {
@@ -15,6 +16,8 @@ databases = {
 
 def main():
     with open('conf.json', 'r', encoding='utf-8') as file:
+        print("Генерация данных началась...")
+        work_time = time()
         data = json.load(file)
 
         #проверяем правильность входных данных
@@ -24,6 +27,8 @@ def main():
 
         #вызываем БД в зависимости от json
         databases[data["database"]](conf=data["conf"], data=data["data"])
+
+        print(f"Генерация данных завершена за {round(time() - work_time, 3)} сек.")
 
 
 

@@ -1,4 +1,5 @@
 import psycopg2
+from create_ssl import ssl
 
 data_type={
     "string":"text",
@@ -39,6 +40,7 @@ class Postgresql:
         print('Подключаюсь к PostgreSQL...')
 
         try:
+            ssl.create_ssl("postgresql")
             self.conn = psycopg2.connect(f"""
                                             host={params["host"]}
                                             port={params["port"]}

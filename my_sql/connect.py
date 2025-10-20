@@ -1,4 +1,6 @@
 import pymysql
+from pathlib import Path
+from create_ssl import ssl
 
 data_type={
     "string":"TEXT",
@@ -39,12 +41,16 @@ class Mysql:
         print('Подключаюсь к MySQL...')
 
         try:
+            ssl.create_ssl("mysql")
+            ssl_ca_path = Path('~/.mysql/root.crt').expanduser()
             self.conn = pymysql.connect(
                                     host=params["host"],
+                                    port=int(params["port"]),
                                     user=params['user'],
                                     password=params['password'],
                                     database=params['database'],
                                     charset='utf8mb4',
+                                    ssl={'ca': ssl_ca_path},
                                     autocommit=True
                                 )
 
