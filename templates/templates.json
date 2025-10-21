@@ -1,0 +1,12 @@
+
+
+
+
+
+{
+  "name": {
+          "name": "string_choice",
+          "type": "string",
+          "values": ["Bob", "Anna", "James"]
+        }
+}

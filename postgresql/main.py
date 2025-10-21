@@ -24,7 +24,7 @@ def postgresql(conf: dict, data: dict) -> None:
 
 
     for i in data:
-        name, data, rows_count = i["name"], i["data"], i["rows_count"]
+        name, data, rows_count = i["name"], i["columns"], i["rows_count"]
         db.execute_query(f"DROP TABLE IF EXISTS {name};")
         db.create_table(name=name, data=data)
         insert_data(name=name, data=data, rows_count=rows_count)

@@ -4,16 +4,23 @@ import csv
 
 
 
-def csv_generate(conf: dict, data: dict) -> None:
+def csv_generate(data: dict) -> None:
     """Функция подключается к БД, создает таблицу, и наливает в нее данные"""
 
 
     with open("file.csv", "w", encoding='utf-8') as file:
         try:
             file_writer = csv.writer(file, delimiter=",", lineterminator="\r")
-            for i in data:
-                for j in range(i["rows_count"]):
-                    file_writer.writerow(generate_values(i["data"]))
+
+            # генерим заголовки
+            row = []
+            for i in data["columns"]:
+                row.append(i["name"])
+            file_writer.writerow(row)
+
+            # Генерим содержимое файла
+            for j in range(data["rows_count"]):
+                file_writer.writerow(generate_values(data["columns"]))
             print("Генерация csv файла завершена")
         except:
             raise "unknow error"

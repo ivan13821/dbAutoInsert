@@ -37,22 +37,36 @@ class Mysql:
         self.conf = conf
         self.connect_to_db(conf)
 
+
+
+
     def connect_to_db(self, params):
         print('Подключаюсь к MySQL...')
 
         try:
-            ssl.create_ssl("mysql")
-            ssl_ca_path = Path('~/.mysql/root.crt').expanduser()
-            self.conn = pymysql.connect(
-                                    host=params["host"],
-                                    port=int(params["port"]),
-                                    user=params['user'],
-                                    password=params['password'],
-                                    database=params['database'],
-                                    charset='utf8mb4',
-                                    ssl={'ca': ssl_ca_path},
-                                    autocommit=True
-                                )
+            if params["host"] == 'localhost':
+                self.conn = pymysql.connect(
+                    host=params["host"],
+                    port=int(params["port"]),
+                    user=params['user'],
+                    password=params['password'],
+                    database=params['database'],
+                    charset='utf8mb4',
+                    autocommit=True
+                )
+            else:
+                ssl.create_ssl("mysql")
+                ssl_ca_path = Path('~/.mysql/root.crt').expanduser()
+                self.conn = pymysql.connect(
+                                        host=params["host"],
+                                        port=int(params["port"]),
+                                        user=params['user'],
+                                        password=params['password'],
+                                        database=params['database'],
+                                        charset='utf8mb4',
+                                        ssl={'ca': ssl_ca_path},
+                                        autocommit=True
+                                    )
 
             self.conn.autocommit = True
             self.cur = self.conn.cursor()
@@ -60,6 +74,9 @@ class Mysql:
 
         except Exception as error:
             print(error)
+
+
+
 
     def execute_query(self, query, params=None):
         try:

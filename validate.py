@@ -20,22 +20,34 @@ class DataItem(BaseModel):
 
 class Tables(BaseModel):
     name: str
-    data: List[DataItem]
+    rows_count: int
+    columns: List[DataItem]
 
 
 class Template(BaseModel):
-    database: Literal["postgresql", "mysql", "csv"]
+    database: Literal["postgresql", "mysql"]
     conf: Conf
-    data: List[Tables]
+    tables: List[Tables]
+
+
+class Template_csv(BaseModel):
+    database: Literal["csv"]
+    columns: List[DataItem]
 
 
 
-
-def validate_json(input_json):
-    try:
-        template = Template(**input_json)
-        return True, "JSON соответствует шаблону"
-    except ValidationError as e:
-        return False, f"Ошибка валидации: {e}"
+def validate_json(input_json, type='database'):
+    if type == "csv":
+        try:
+            Template_csv(**input_json)
+            return True, "JSON соответствует шаблону"
+        except ValidationError as e:
+            return False, f"Ошибка валидации: {e}"
+    else:
+        try:
+            Template(**input_json)
+            return True, "JSON соответствует шаблону"
+        except ValidationError as e:
+            return False, f"Ошибка валидации: {e}"
 
 
