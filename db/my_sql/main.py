@@ -1,5 +1,5 @@
 from generate.main import Generate
-from my_sql.connect import Mysql
+from db.my_sql.connect import Mysql
 
 data_type={
     "string":"TEXT",

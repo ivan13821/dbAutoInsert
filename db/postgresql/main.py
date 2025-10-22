@@ -1,4 +1,4 @@
-from postgresql.connect import Postgresql
+from db.postgresql.connect import Postgresql
 from generate.main import Generate
 
 

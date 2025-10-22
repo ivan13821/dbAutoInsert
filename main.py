@@ -1,10 +1,10 @@
 import json
 from validate import validate_json
-from postgresql.main import postgresql
+from db.postgresql.main import postgresql
 from csv_file.main import csv_generate
-from my_sql.main import mysql
+from db.my_sql.main import mysql
 from time import time
-
+from templates.main import JSONTemplates
 
 databases = {
     "postgresql": postgresql,
@@ -19,6 +19,8 @@ def main():
         work_time = time()
         data = json.load(file)
 
+        #Заменяет шаблоны на корректные данные
+        JSONTemplates.replace_templates(data)
 
         # Если это csv то он генерится иначе
         if data["database"] == "csv":
