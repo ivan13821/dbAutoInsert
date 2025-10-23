@@ -1,5 +1,5 @@
 import psycopg2
-from create_ssl import ssl
+from db.create_ssl import ssl
 
 data_type={
     "string":"text",

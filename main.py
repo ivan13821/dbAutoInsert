@@ -1,6 +1,7 @@
 import json
 from validate import validate_json
 from db.postgresql.main import postgresql
+from db.clickhouse.main import clickhouse
 from csv_file.main import csv_generate
 from db.my_sql.main import mysql
 from time import time
@@ -8,7 +9,8 @@ from templates.main import JSONTemplates
 
 databases = {
     "postgresql": postgresql,
-    "mysql":mysql
+    "mysql":mysql,
+    "clickhouse": clickhouse
 }
 
 
