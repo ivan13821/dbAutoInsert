@@ -35,53 +35,7 @@ pip install -r requirements.txt
 # 🚀 Использование
 
 ## Создание JSON
-
 Подробнее о создании JSON, пишем в документации для специалистов Yandex
-```json
-
-{
-  "database": "postgresql", 
-  "conf":{
-    "host": "c-c***************m30b.rw.mdb.yandexcloud.net",
-    "database": "*****",
-    "port": "****",
-    "sslmode": "verify-full",
-    "user": "*******",
-    "password": "*********",
-    "target_session_attrs": "read-write"
-  },
-  "data": [
-    {
-      "name": "table1",
-      "data": [
-        {
-          "name": "text",
-          "type": "string",
-          "len": 100,
-          "values": "random"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "len": 40,
-          "values": ["Bob", "Anna", "Jon"]
-        },
-        {
-          "name": "date_of_bithday",
-          "type": "date",
-          "values": "2019-01-01 2020-01-01"
-        },
-        {
-          "name": "age",
-          "type": "integer",
-          "len": 2,
-          "values": "random"
-        }
-      ]
-    }
-  ]
-}
-```
 
 ## Запуск
 После настройки конфигурационного файла, просто запустите главный скрипт:
