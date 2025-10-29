@@ -82,6 +82,12 @@
     "values": "1-10000"
   },
 
+  "cost": {
+    "name": "Стоимость",
+    "type": "integer",
+    "values": "100-1000000"
+  },
+
   "date": {
     "name": "date_random",
     "type": "date",
