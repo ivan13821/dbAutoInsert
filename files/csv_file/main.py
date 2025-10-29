@@ -29,7 +29,6 @@ def csv_generate(data: dict) -> None:
             # Генерим содержимое файла
             for j in range(data["rows_count"]):
                 file_writer.writerow(generate_values(data["columns"]))
-            print("Генерация csv файла завершена")
         except:
             raise "unknow error"
 

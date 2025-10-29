@@ -2,11 +2,11 @@ import json
 from validate import validate_json
 from db.postgresql.main import postgresql
 from db.clickhouse.main import clickhouse
-from csv_file.main import csv_generate
+from files.csv_file.main import csv_generate
 from db.my_sql.main import mysql
 from time import time
 from templates.main import JSONTemplates
-from xlsx.main import xlsx
+from files.xlsx.main import xlsx
 
 databases = {
     "postgresql": postgresql,
@@ -34,8 +34,10 @@ def main():
                 return 0
             if data["database"] == "xlsx":
                 xlsx(data)
+                print("Генерация xlsx файла завершена")
             else:
                 csv_generate(data)
+                print("Генерация csv файла завершена")
 
 
         else:
