@@ -12,10 +12,18 @@ def csv_generate(data: dict) -> None:
         try:
             file_writer = csv.writer(file, delimiter=",", lineterminator="\r")
 
+            names = {}
+
             # генерим заголовки
             row = []
             for i in data["columns"]:
-                row.append(i["name"])
+                if i["name"] in names.keys():
+                    row.append(i["name"]+str(names[i["name"]]))
+                    names[i["name"]] += 1
+                else:
+                    row.append(i["name"])
+                    names[i["name"]] = 1
+
             file_writer.writerow(row)
 
             # Генерим содержимое файла

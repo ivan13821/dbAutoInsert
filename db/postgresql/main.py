@@ -20,6 +20,8 @@ def postgresql(conf: dict, data: dict) -> None:
 
     global db
 
+    print(data)
+
     db = Postgresql(conf=conf)
 
 
@@ -41,6 +43,14 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
     query = f"""INSERT INTO {name} ({', '.join([i["name"] for i in data])}) values """
 
     for i in range(rows_count):
+
+        #Если данных слишком много, отправляем запрос, чтобы прога по оперативке не упала
+        if len(big_mass) > 10000:
+            query += ', '.join(big_mass) + ';'
+            db.execute_query(query)
+            big_mass = []
+            query = f"""INSERT INTO {name} ({', '.join([i["name"] for i in data])}) values """
+
 
         big_mass.append(generate_values(data))
 
@@ -91,6 +101,8 @@ def generate_values(data):
             mass.append(Generate.datetime(pole['values']))
 
     return f"('{"', '".join(mass)}')"
+
+
 
 
 
