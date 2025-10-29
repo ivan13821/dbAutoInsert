@@ -100,4 +100,4 @@ class Mysql:
 
     def create_table(self, name: str, data: dict):
 
-        self.execute_query(f"""CREATE TABLE {name} (id serial primary key, {', '.join([i["name"] + ' ' + data_type[i["type"]] for i in data])});""")
+        self.execute_query(f"""CREATE TABLE {name} (id serial primary key, {', '.join(['`'+i["name"]+'`' + ' ' + data_type[i["type"]] for i in data])});""")

@@ -38,7 +38,7 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
     global db
 
     big_mass = []
-    query = f"""INSERT INTO {name} ({', '.join([i["name"] for i in data])}) values """
+    query = f"""INSERT INTO {name} ({', '.join(['`'+i["name"]+'`' for i in data])}) values """
 
     for i in range(rows_count):
 
@@ -47,7 +47,7 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
             query += ', '.join(big_mass) + ';'
             db.execute_query(query)
             big_mass = []
-            query = f"""INSERT INTO {name} ({', '.join([i["name"] for i in data])}) values """
+            query = f"""INSERT INTO {name} ({', '.join(['`'+i["name"]+'`' for i in data])}) values """
 
         big_mass.append(generate_values(data))
 
