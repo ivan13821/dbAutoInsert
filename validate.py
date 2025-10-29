@@ -31,7 +31,7 @@ class Template(BaseModel):
 
 
 class Template_csv(BaseModel):
-    database: Literal["csv"]
+    database: Literal["csv", "xlsx"]
     columns: List[DataItem]
 
 

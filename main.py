@@ -6,6 +6,7 @@ from csv_file.main import csv_generate
 from db.my_sql.main import mysql
 from time import time
 from templates.main import JSONTemplates
+from xlsx.main import xlsx
 
 databases = {
     "postgresql": postgresql,
@@ -25,13 +26,16 @@ def main():
         JSONTemplates.replace_templates(data)
 
         # Если это csv то он генерится иначе
-        if data["database"] == "csv":
+        if data["database"] in ["csv", "xlsx"]:
 
             # проверяем правильность входных данных
             if not (answer := validate_json(data, type='csv'))[0]:
                 print(answer[1])
                 return 0
-            csv_generate(data)
+            if data["database"] == "xlsx":
+                xlsx(data)
+            else:
+                csv_generate(data)
 
 
         else:
