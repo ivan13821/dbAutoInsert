@@ -1,6 +1,6 @@
 from db.postgresql.connect import Postgresql
 from generate.main import Generate
-
+from tqdm import tqdm
 
 
 data_type={
@@ -19,8 +19,6 @@ def postgresql(conf: dict, data: dict) -> None:
     """Функция подключается к БД, создает таблицу, и наливает в нее данные"""
 
     global db
-
-    print(data)
 
     db = Postgresql(conf=conf)
 
@@ -42,6 +40,7 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
     big_mass = []
     query = f"""INSERT INTO {name} ({', '.join(['"'+i["name"]+'"' for i in data])}) values """
 
+    pbar = tqdm(total=rows_count)
     for i in range(rows_count):
 
         #Если данных слишком много, отправляем запрос, чтобы прога по оперативке не упала
@@ -53,6 +52,7 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
 
 
         big_mass.append(generate_values(data))
+        pbar.update(1)
 
     query += ', '.join(big_mass) + ';'
 

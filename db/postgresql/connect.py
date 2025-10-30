@@ -40,16 +40,26 @@ class Postgresql:
         print('Подключаюсь к PostgreSQL...')
 
         try:
-            ssl.create_ssl("postgresql")
-            self.conn = psycopg2.connect(f"""
-                                            host={params["host"]}
-                                            port={params["port"]}
-                                            {f'sslmode={params["sslmode"]}' if 'sslmode' in params.keys() else ''}
-                                            dbname={params["database"]}
-                                            user={params["user"]}
-                                            password={params["password"]}
-                                            target_session_attrs={params["target_session_attrs"]}
-                                        """)
+            if params["host"] == 'localhost':
+                self.conn = psycopg2.connect(f"""
+                                                                host={params["host"]}
+                                                                port={params["port"]}
+                                                                dbname={params["database"]}
+                                                                user={params["user"]}
+                                                                password={params["password"]}
+                                                                target_session_attrs={params["target_session_attrs"]}
+                                                            """)
+            else:
+                ssl.create_ssl("postgresql")
+                self.conn = psycopg2.connect(f"""
+                                                host={params["host"]}
+                                                port={params["port"]}
+                                                {f'sslmode={params["sslmode"]}' if 'sslmode' in params.keys() else ''}
+                                                dbname={params["database"]}
+                                                user={params["user"]}
+                                                password={params["password"]}
+                                                target_session_attrs={params["target_session_attrs"]}
+                                            """)
 
             self.conn.autocommit = True
             self.cur = self.conn.cursor()

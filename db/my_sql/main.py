@@ -1,5 +1,7 @@
 from generate.main import Generate
 from db.my_sql.connect import Mysql
+from tqdm import tqdm
+
 
 data_type={
     "string":"TEXT",
@@ -40,6 +42,8 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
     big_mass = []
     query = f"""INSERT INTO {name} ({', '.join(['`'+i["name"]+'`' for i in data])}) values """
 
+    pbar = tqdm(total=rows_count)
+
     for i in range(rows_count):
 
         # Если данных слишком много, отправляем запрос, чтобы прога по оперативке не упала
@@ -50,6 +54,7 @@ def insert_data(name: str, data: dict, rows_count: int) -> None:
             query = f"""INSERT INTO {name} ({', '.join(['`'+i["name"]+'`' for i in data])}) values """
 
         big_mass.append(generate_values(data))
+        pbar.update(1)
 
     query += ', '.join(big_mass) + ';'
 

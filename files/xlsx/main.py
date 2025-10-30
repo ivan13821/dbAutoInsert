@@ -7,7 +7,7 @@ def xlsx(data: dict) -> None:
     """Геенерит xlsxl файл"""
 
     csv_generate(data)
-
+    print(f"Генерация данных завершена. Идет преобразование к формату xlsx")
     df = pd.read_csv('file.csv')
     df.to_excel('file.xlsx', index=False)
 

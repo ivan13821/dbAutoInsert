@@ -1,4 +1,5 @@
 from generate.main import Generate
+from tqdm import tqdm
 import csv
 
 
@@ -11,6 +12,8 @@ def csv_generate(data: dict) -> None:
     with open("file.csv", "w", encoding='utf-8') as file:
         try:
             file_writer = csv.writer(file, delimiter=",", lineterminator="\r")
+
+            pbar = tqdm(total=data["rows_count"])
 
             names = {}
 
@@ -25,10 +28,12 @@ def csv_generate(data: dict) -> None:
                     names[i["name"]] = 1
 
             file_writer.writerow(row)
+            pbar.update(1)
 
             # Генерим содержимое файла
             for j in range(data["rows_count"]):
                 file_writer.writerow(generate_values(data["columns"]))
+                pbar.update(1)
         except:
             raise "unknow error"
 
