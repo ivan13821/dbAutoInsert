@@ -3,7 +3,7 @@ from datetime import datetime
 class DateDefence:
 
     @staticmethod
-    def check_input(value, len: int = 0, number_of_decimal: int = None) -> bool:
+    def check_input(value, len: str = 0) -> bool:
         """ Проверяет все возможные значения value для целочисленного типа данных """
 
         if value == "random":
@@ -49,34 +49,14 @@ class DateDefence:
     def __date(date, split="-") -> bool:
         """Проверяет корректность даты"""
 
-        day_on_month = {
-            1:31,
-            2: 28,
-            3: 31,
-            4: 30,
-            5: 31,
-            6: 30,
-            7: 31,
-            8: 31,
-            9: 30,
-            10: 31,
-            11: 30,
-            12: 31,
-        }
-
-        date = date.split(split)
-
-        if False in list(map(DateDefence.__integer, date)): return False
-
-        year, month, day = date
-
-        if not (len(month) == 2 and len(day) == 2):
+        if type(date) != str:
             return False
 
-        if not (1970 <= int(year) and 1 <= int(month) <= 12 and 1 <= int(day) <= day_on_month[int(month)]):
+        try:
+            datetime.strptime(date, "%Y-%m-%d").date()
+            return True
+        except:
             return False
-
-        return True
 
 
 

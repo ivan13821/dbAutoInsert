@@ -6,7 +6,7 @@
 class StringDefence:
 
     @staticmethod
-    def check_input(value, len: int = 0, number_of_decimal: int = None) -> bool:
+    def check_input(value, len: int = 0) -> bool:
         """ Проверяет все возможные значения values для целочисленного типа данных """
 
         if value == "random":
@@ -39,6 +39,9 @@ class StringDefence:
     @staticmethod
     def __string(string) -> bool:
         """Проверяет корректность строки """
+
+        if type(string) != str:
+            return False
 
         for i in string:
             if i not in " qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNMйцукёЁенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ.,-":

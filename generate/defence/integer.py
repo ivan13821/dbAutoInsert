@@ -51,8 +51,13 @@ class IntegerDefence:
     def __integer(number) -> bool:
         """Проверяет корректность числа"""
 
+        if type(number) != int and type(number) != str:
+            return False
+
         try:
-            int(number)
+            number = int(number)
+            if number < 0:
+                return False
             return True
         except:
             return False

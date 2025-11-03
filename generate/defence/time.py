@@ -1,3 +1,5 @@
+from datetime import time
+
 
 class TimeDefence:
 
@@ -24,6 +26,13 @@ class TimeDefence:
             if TimeDefence.__time(start) == False or TimeDefence.__time(end) == False:
                 raise ValueError(f"Ошибка при генерации time из диапазона: Некорректное время в внури диапазона: {value}")
             else:
+                h, m, s = map(int, start.split(':'))
+                start = time(h, m, s)
+                h, m, s = map(int, end.split(':'))
+                end = time(h, m, s)
+                if start >= end:
+                    raise ValueError(
+                        f"Ошибка при генерации time из диапазона: начало диапазона не может быть больше конца: {value}")
                 return True
 
         raise ValueError(f"Ошибка при генерации time: Unknow error. value={value}")
@@ -41,33 +50,15 @@ class TimeDefence:
 
 
     @staticmethod
-    def __time(time) -> bool:
+    def __time(input_time) -> bool:
         """Проверяет корректность времени"""
 
-        time = time.split(':')
-
-        if len(time) != 3:
+        if type(input_time) != str:
             return False
-
-        if False in list(map(TimeDefence.__integer, time)):
-            return False
-
-        time = list(map(int, time))
-        if not (0 <= time[0] <= 23 and 0 <= time[1] <= 59 and 0 <= time[2] <= 59):
-            return False
-
-        return True
-
-
-
-
-
-    @staticmethod
-    def __integer(number) -> bool:
-        """Проверяет корректность числа"""
 
         try:
-            int(number)
+            h, m, s = map(int, input_time.split(':'))
+            time(h, m, s)
             return True
         except:
             return False
