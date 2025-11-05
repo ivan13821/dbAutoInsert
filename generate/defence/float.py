@@ -3,7 +3,7 @@
 class FloatDefence:
 
     @staticmethod
-    def check_input(value, len) -> bool:
+    def check_input(value, len: int = 0) -> bool:
         """ Проверяет все возможные значения value для целочисленного типа данных """
 
         if value == "random":
@@ -49,6 +49,9 @@ class FloatDefence:
     @staticmethod
     def __float(number) -> bool:
         """Проверяет корректность числа"""
+
+        if type(number) != str:
+            return False
 
         try:
             float(number)

@@ -1,7 +1,7 @@
 from generate.defence.date import DateDefence
 from generate.defence.time import TimeDefence
-
-
+from datetime import datetime
+from datetime import time
 
 
 class DateTimeDefence(DateDefence, TimeDefence):
@@ -28,8 +28,24 @@ class DateTimeDefence(DateDefence, TimeDefence):
 
             if DateTimeDefence.__datetime(start, "|") == False or DateTimeDefence.__datetime(end, "|") == False:
                 raise ValueError(f"Ошибка при генерации datetime из диапазона: Некорректное время или дата внутри диапазона: {value}")
-            else:
+
+            start_date, start_time = start.split("|")
+            end_date, end_time = end.split("|")
+            if datetime.strptime(start_date, '%Y-%m-%d') < datetime.strptime(end_date, '%Y-%m-%d'):
                 return True
+
+            if datetime.strptime(start_date, '%Y-%m-%d') > datetime.strptime(end_date, '%Y-%m-%d'):
+                raise ValueError(f"Ошибка при генерации datetime: Начало диапазона не может быть больше его конца. value={value}")
+
+            h, m, s = map(int, start_time.split(':'))
+            start = time(h, m, s)
+            h, m, s = map(int, end_time.split(':'))
+            end = time(h, m, s)
+            if start >= end:
+                raise ValueError(
+                    f"Ошибка при генерации datetime: Начало диапазона не может быть больше его конца. value={value}")
+
+            return True
 
         raise ValueError(f"Ошибка при генерации datetime: Unknow error. value={value}")
 
@@ -48,6 +64,9 @@ class DateTimeDefence(DateDefence, TimeDefence):
     @staticmethod
     def __datetime(datetime, split=" ") -> bool:
         """Проверяет корректность даты и времени"""
+
+        if type(datetime) != str:
+            return False
 
         datetime = datetime.split(split)
 

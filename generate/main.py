@@ -57,10 +57,8 @@ class Generate:
             return str(random.choice(values))
 
         if "-" in values:
-            start, end = values.split('-')
-            start = start.split('.')
-            end = end.split('.')
-            return Generate.__integer(start[0]+'-'+end[0]) + '.' + Generate.__integer(start[1]+'-'+end[1])
+            start, end = list(map(float, values.split('-')))
+            return str(random.uniform(start, end))
 
         raise ValueError("Неверное значение для поля values типа данных float")
 

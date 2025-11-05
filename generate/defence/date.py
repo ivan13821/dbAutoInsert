@@ -14,7 +14,7 @@ class DateDefence:
             value = list(map(DateDefence.__date, value))
 
             if False in value:
-                raise ValueError(f"Ошибка при генерации integer из списка: Некорректная дата в списке. value={value}")
+                raise ValueError(f"Ошибка при генерации даты из списка: Некорректная дата в списке. value={value}")
 
             return True
 
