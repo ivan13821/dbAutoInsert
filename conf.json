@@ -1,0 +1,36 @@
+
+
+  {
+  "database": "postgresql",
+  "conf":{
+    "host": "localhost",
+    "database": "support",
+    "port": "5432",
+    "user": "ivashka",
+    "password": "12345",
+    "target_session_attrs": "read-write"
+  },
+  "tables": [
+    {
+      "name": "my_table",
+      "rows_count": 1000,
+      "columns": [
+        "{{ name }}",
+        "{{ category }}",
+        "{{ surname }}",
+        "{{ gender }}",
+        "{{ age }}",
+        "{{ city }}",
+        "{{ job_title }}",
+        "{{ company }}",
+        "{{ industry }}",
+        "{{ salary }}",
+        "{{ work_experience }}",
+        "{{ website }}",
+        "{{ quantity }}",
+        "{{ date }}",
+        "{{ datetime }}"
+      ]
+    }
+  ]
+  }
